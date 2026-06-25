@@ -504,6 +504,20 @@ def extrair_campos_nf(texto: str, doc: DocumentoFiscal):
                 d = datas[-1]
                 doc.vencimento_nf = f"{d[0]}/{d[1]}/{d[2]}"
                 doc.vencimento_nf = data_str
+    # Fallback: TON/TML colado ao valor unitario (ex: "TON 24,310024.027")
+    if doc.quantidade_ton is None:
+        # Captura apenas os digitos antes do segundo bloco numerico
+        m = re.search(r"(?:TON|TML)\s+([\d]{1,3}[,\.][\d]{2,4})(?=[\d])", texto, re.IGNORECASE)
+        if not m:
+            m = re.search(r"(?:TON|TML)\s+([\d,\.]+?)\s", texto, re.IGNORECASE)
+        if m:
+            raw = m.group(1).replace(".", "").replace(",", ".")
+            try:
+                val = float(raw)
+                doc.quantidade_ton = val if val < 1000 else val / 1000
+            except Exception:
+                pass
+                pass
     if doc.quantidade_ton is None: doc.erros.append("Quantidade não encontrada na NF")
 
 
