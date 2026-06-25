@@ -1,118 +1,167 @@
-# 📊 Análise de Defeitos de Fabricação — Power BI
+﻿# SIA — Sistema Identificador de Arquivos
 
-> Trabalho acadêmico desenvolvido para a disciplina de **Inteligência de Negócios**
+<div align="center">
 
----
+![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![PyQt6](https://img.shields.io/badge/PyQt6-6.x-41CD52?style=for-the-badge&logo=qt&logoColor=white)
+![Gemini AI](https://img.shields.io/badge/Gemini_AI-2.0_Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![Tesseract](https://img.shields.io/badge/Tesseract_OCR-5.5-FF6B35?style=for-the-badge)
+![Release](https://img.shields.io/github/v/release/ramon-nsz/SIA-Sistema-Identificador-de-Arquivos?style=for-the-badge&color=blue)
+![Platform](https://img.shields.io/badge/Windows_10%2F11-0078D4?style=for-the-badge&logo=windows&logoColor=white)
 
-## 📋 Sobre o Projeto
+**Automacao inteligente de documentos fiscais brasileiros com IA e OCR**
 
-Este projeto consiste em um dashboard interativo desenvolvido no **Power BI** para análise de defeitos de fabricação em processos de controle de qualidade industrial.
+[Download](https://github.com/ramon-nsz/SIA-Sistema-Identificador-de-Arquivos/releases/latest) · [Reportar Bug](https://github.com/ramon-nsz/SIA-Sistema-Identificador-de-Arquivos/issues)
 
-A proposta foi transformar um dataset de defeitos simulados em **insights acionáveis**, cobrindo três dimensões principais: volume de defeitos, impacto financeiro e padrões temporais.
-
----
-
-## 📁 Estrutura do Repositório
-
-```
-📦 analise-defeitos-fabricacao
- ┣ 📊 Trabalho_BI.pbix         # Dashboard Power BI
- ┣ 📄 defects_data.csv         # Dataset original (CSV)
- ┣ 📄 defects_data.xlsx        # Dataset original (Excel)
- ┣ 📄 Defeitos_de_fabricação.pdf  # Documentação do dataset
- ┗ 📖 README.md
-```
+</div>
 
 ---
 
-## 🗂️ Sobre o Dataset
+## Sobre o Projeto
 
-| Coluna | Descrição |
+O **SIA (Sistema Identificador de Arquivos)** automatiza a organizacao de documentos fiscais brasileiros. Desenvolvido para equipes de contas a pagar, elimina o trabalho manual de identificar, casar e combinar NF-e, Boletos e Pedidos SAP em um unico fluxo.
+
+**O problema que resolve:** em operacoes de compras, e comum receber dezenas de PDFs por dia sem organizacao. O processo manual de identificar cada documento, casar a NF com o pedido SAP (por quantidade) e com o boleto (por valor), e gerar um PDF unico consome horas e esta sujeito a erros. O SIA faz tudo em segundos.
+
+---
+
+## Funcionalidades
+
+| Funcionalidade | Descricao |
 |---|---|
-| `defect_id` | Identificador único do defeito |
-| `product_id` | Identificador do produto |
-| `defect_type` | Tipo do defeito (cosmético, funcional, estrutural) |
-| `defect_description` | Descrição detalhada |
-| `defect_date` | Data de detecção |
-| `defect_location` | Localização no produto (superfície, componente) |
-| `severity` | Nível de severidade (menor, moderado, crítico) |
-| `inspect_method` | Método de inspeção (visual, automatizado) |
-| `repair_action` | Ação corretiva tomada |
-| `repair_cost` | Custo de reparo (moeda local) |
+| Identificacao com IA | Classifica NF-e, Boletos e Pedidos SAP via Gemini AI |
+| OCR Offline | Processa documentos escaneados via Tesseract (sem internet) |
+| Matching Inteligente | Casa NF x SAP por quantidade (0.002t) e NF x Boleto por valor (R$1,00) |
+| Geracao de PDFs | Combina documentos na ordem: SAP + NF-e + Boleto |
+| Dashboard Visual | Graficos, cards de resumo e tabela do lote processado |
+| Relatorio Excel | Exporta .xlsx com 4 abas: Lote, Vencimentos, Resumo e Graficos |
+| Configuracao Guiada | Setup intuitivo para chave Gemini na primeira abertura |
+| Rodizio de Chaves | Alterna entre multiplas chaves Gemini automaticamente |
+| Portavel | Executavel unico, sem instalacao — Tesseract ja incluso |
 
 ---
 
-## 📈 Estrutura do Dashboard
+## Tecnologias
 
-### Página 1 — Dashboard Geral
-Visão panorâmica da operação de qualidade.
-
-- **KPIs**: Custo Total · Total de Defeitos · Custo Médio
-- **Gráfico de linhas**: Evolução do custo total ao longo do tempo
-- **Gráfico de barras horizontais**: Total de defeitos por tipo
-- **Gráfico de colunas agrupadas**: Total de defeitos por severidade
-- **Gráficos de área**: Evolução temporal de cada KPI
-
-### Página 2 — Custos
-Análise financeira aprofundada.
-
-- **KPIs**: Impacto Financeiro Total · Custo Médio
-- **Gráfico de colunas**: Custo total por nível de severidade
-- **Gráfico de área**: Sazonalidade mensal dos custos
-- **Gráficos de área**: Evolução de Custo Total e Custo Médio
+- **Python 3.10+** — linguagem principal
+- **PyQt6** — interface grafica desktop
+- **Google Gemini AI 2.0 Flash** — identificacao e extracao de campos
+- **Tesseract OCR 5.5** — OCR para PDFs escaneados (bundlado)
+- **pdfplumber / pypdf / PyMuPDF** — processamento de PDFs
+- **openpyxl** — geracao de planilhas Excel
+- **PyInstaller** — empacotamento em executavel Windows
 
 ---
 
-## 🔍 Principais Insights
+## Estrutura de Pastas
+SIA-Sistema-Identificador-de-Arquivos/
 
-- 📉 **Redução de 20%** no custo total entre janeiro e junho de 2024 ($87 mil → $70 mil)
-- ⚡ **Queda mais abrupta** registrada entre março e abril: de $85 mil para $68 mil em um único mês
-- 🔄 **Padrão oscilatório** identificado ao longo do semestre, sugerindo ciclos de produção ou sazonalidade no processo fabril
-- 📊 **Média do período**: $77 mil — com os últimos dois meses abaixo da média, reforçando a tendência de queda
+├── main.py                  # Entry point — interface PyQt6
 
+├── src/
+
+│   ├── extractor.py         # Identificacao e extracao de campos
+
+│   ├── matcher.py           # Casamento NF x SAP x Boleto
+
+│   ├── merger.py            # Combinacao de PDFs
+
+│   ├── reporter.py          # Relatorio Excel
+
+│   ├── dashboard.py         # Dashboard visual
+
+│   ├── config_manager.py    # Configuracoes do usuario
+
+│   └── setup_dialog.py      # Tela de configuracao inicial
+
+└── tesseract/               # Binarios do Tesseract (bundlados)
+
+├── tesseract.exe
+
+└── tessdata/
+
+├── por.traineddata
+
+└── eng.traineddata
 ---
 
-## 🛠️ Tecnologias Utilizadas
+## Instalacao e Uso
 
-| Tecnologia | Uso |
-|---|---|
-| Power BI Desktop | Desenvolvimento do dashboard |
-| DAX | Criação das medidas (Custo Total, Total Defeitos, Custo Médio) |
-| Power Query | Transformação e modelagem dos dados |
-| Excel / CSV | Dataset fonte |
+### Executavel (recomendado)
 
----
+1. Acesse [Releases](https://github.com/ramon-nsz/SIA-Sistema-Identificador-de-Arquivos/releases/latest)
+2. Baixe `SIA-v1.0-windows.zip`
+3. Extraia e execute `SIA.exe`
 
-## 🏗️ Modelo de Dados
+### Codigo-fonte
 
-O modelo é composto por uma única tabela (`defects_data`) com as seguintes **medidas DAX**:
-
-```dax
-[Custo Total]    -- Soma dos custos de reparo
-[Total Defeitos] -- Contagem de registros de defeitos
-[Custo Médio]    -- Custo Total / Total Defeitos
+```bash
+git clone https://github.com/ramon-nsz/SIA-Sistema-Identificador-de-Arquivos.git
+cd SIA-Sistema-Identificador-de-Arquivos
+pip install pyqt6 pdfplumber pypdf pymupdf google-genai pytesseract openpyxl pillow python-dotenv
+python main.py
 ```
 
-Dimensões utilizadas nos visuais: `defect_type`, `severity`, `defect_date` (com hierarquia Ano → Mês → Dia).
+---
+
+## Configuracao da API Gemini
+
+1. Acesse [aistudio.google.com](https://aistudio.google.com)
+2. Faca login com sua conta Google
+3. Clique em **Get API key** e depois **Create API key**
+4. Abra o SIA, clique no icone de configuracoes e cole sua chave
+
+A API Gemini tem camada gratuita com 1.500 requisicoes/dia — suficiente para uso diario.
 
 ---
 
-## 👥 Equipe
-
-> Trabalho realizado em grupo — disciplina de Inteligência de Negócios
-
-<!-- Adicione os nomes dos integrantes do grupo abaixo -->
-- Fernando Stievano
-- Marcello Raitz Debortoli
-- Gabriel Araújo Lima
+## Nomenclatura dos arquivos gerados
+DDMMAAAA_PEDIDO_4500XXXXXX.pdf
+Exemplo: `22062026_PEDIDO_4500034730.pdf`
 
 ---
 
-## 📚 Referência
+## Troubleshooting
 
-- Dataset: [Manufacturing Defects — Kaggle](https://www.kaggle.com/datasets/fahmidachowdhury/manufacturing-defects)
-- Ferramenta: [Microsoft Power BI](https://powerbi.microsoft.com)
+**Documento retorna "Nao identificado"**
+- Verifique se a chave Gemini esta configurada
+- Aguarde o reset da quota (21h de Brasilia) ou adicione mais chaves
+- O Tesseract OCR e acionado automaticamente como fallback
+
+**Valor do boleto incorreto**
+- PDFs digitais tem extracao mais precisa que escaneados
+- Boletos sem par podem ser anexados manualmente via script pypdf
+
+**Executavel bloqueado pelo antivirus**
+- Adicione o SIA.exe as excecoes — executaveis PyInstaller sao frequentemente sinalizados como falso-positivo
+- O codigo-fonte completo esta disponivel para auditoria
 
 ---
 
-<p align="center">Desenvolvido para fins acadêmicos e educacionais</p>
+## Roadmap
+
+- [x] Identificacao automatica de NF-e, Boleto e SAP
+- [x] OCR offline via Tesseract
+- [x] Dashboard visual
+- [x] Exportacao Excel
+- [x] Tela de configuracao Gemini
+- [x] Executavel portavel Windows
+- [ ] Suporte a CT-e e NFS-e
+- [ ] Historico de lotes processados
+- [ ] Integracao com Google Drive
+- [ ] Versao macOS/Linux
+
+---
+
+## Autor
+
+**Ramon Nunes**
+
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Ramon_Nunes-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ramon-nunes2/)
+[![GitHub](https://img.shields.io/badge/GitHub-ramon--nsz-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ramon-nsz)
+
+---
+
+## Licenca
+
+Distribuido sob a licenca MIT.
