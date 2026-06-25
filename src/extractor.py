@@ -204,7 +204,7 @@ Se nao conseguir identificar:
 
 Regras:
 - numero_nf: apenas digitos, sem zeros a esquerda
-- quantidade_ton: sempre em toneladas (dividir por 1000 se estiver em KG)
+- quantidade_ton: sempre em toneladas. Se unidade for KG, divida por 1000. Formatos possiveis: "25.080,000 t" (BR) ou "25,080.0000 KG" (americano). Exemplo KG americano: 25080 KG = 25.080 t
 - valores: float com ponto decimal (ex: 510455.53)
 - vencimento: formato DD/MM/AAAA
 - Use null para campos nao encontrados
@@ -359,6 +359,19 @@ def _parse_valor_br(texto_valor: str) -> Optional[float]:
 # Extração de campos — NF-e
 # ---------------------------------------------------------------------------
 
+
+def _parse_valor_us(texto_valor: str) -> Optional[float]:
+    """Parse de valor em formato americano: 313,665.99 -> 313665.99"""
+    try:
+        limpo = re.sub(r"[^\d,.]", "", texto_valor)
+        # Formato americano: virgula=milhar, ponto=decimal
+        if "," in limpo and "." in limpo and limpo.rindex(",") < limpo.rindex("."):
+            limpo = limpo.replace(",", "")
+            return float(limpo)
+        return _parse_valor_br(texto_valor)
+    except Exception:
+        return None
+
 def _extrair_nf_via_gemini(texto: str, doc: DocumentoFiscal) -> bool:
     if not _GEMINI_KEY_LIST:
         return False
@@ -448,6 +461,49 @@ def extrair_campos_nf(texto: str, doc: DocumentoFiscal):
 
     if not doc.numero_nf: doc.erros.append("Número da NF não encontrado")
     if doc.valor_nf is None: doc.erros.append("Valor total da NF não encontrado")
+    # Fallback formato americano (Dow Brasil): "25,080.0000 KG"
+    if doc.quantidade_ton is None:
+        m = re.search(r"KG\s+([\d,]+\.[\d]+)", texto, re.IGNORECASE)
+        if not m:
+            m = re.search(r"([\d,]+\.[\d]+)\s*KG", texto, re.IGNORECASE)
+        if m:
+            import re as _re2
+            raw = m.group(1).replace(",", "")
+            try:
+                val = float(raw)
+                doc.quantidade_ton = round(val / 1000, 5) if val > 100 else val
+            except Exception:
+                pass
+    # Fallback valor total formato americano (maior valor com milhar separado por virgula)
+    if doc.valor_nf is None or doc.valor_nf < 1000:
+        import re as _re3
+        vals = _re3.findall(r"[\d]{1,3}(?:,[\d]{3})+\.[\d]{2}", texto)
+        candidatos = []
+        for v in vals:
+            try:
+                candidatos.append(float(v.replace(",", "")))
+            except Exception:
+                pass
+        candidatos = [c for c in candidatos if c > 1000]
+        if candidatos:
+            doc.valor_nf = max(candidatos)
+    # Fallback vencimento formato DD.MM.AAAA (Dow Brasil)
+    if not doc.vencimento_nf:
+        # Procura data apos a palavra VENCIMENTO ou NUMERO+VENCIMENTO
+        m = re.search(r"(?:VENCIMENTO|VENCIM)[^\d]*(\d{2})[./-](\d{2})[./-](\d{4})", texto, re.IGNORECASE)
+        if m:
+            doc.vencimento_nf = f"{m.group(1)}/{m.group(2)}/{m.group(3)}"
+        else:
+            # Pega a ultima data no formato DD.MM.AAAA (tende a ser vencimento)
+            datas = re.findall(r"(\d{2})\.(\d{2})\.(\d{4})", texto)
+            datas_futuras = [d for d in datas if int(d[1]) > 6 or int(d[2]) > 2026]
+            if datas_futuras:
+                d = datas_futuras[0]
+                doc.vencimento_nf = f"{d[0]}/{d[1]}/{d[2]}"
+            elif datas:
+                d = datas[-1]
+                doc.vencimento_nf = f"{d[0]}/{d[1]}/{d[2]}"
+                doc.vencimento_nf = data_str
     if doc.quantidade_ton is None: doc.erros.append("Quantidade não encontrada na NF")
 
 
@@ -619,6 +675,24 @@ def extrair_campos_sap(texto: str, nome_arquivo: str, doc: DocumentoFiscal):
     doc.nome_original = Path(nome_arquivo).stem
 
     if not doc.numero_pedido: doc.erros.append("Numero do pedido SAP não encontrado")
+    # Fallback para SAP Dow Brasil: "25.080kg" (formato BR, ponto=milhar)
+    if doc.quantidade_sap_ton is None:
+        m = re.search(r"([\d]{1,3}(?:[.,][\d]{3})+)\s*kg", texto, re.IGNORECASE)
+        if m:
+            raw = m.group(1)
+            # Formato BR: ponto=milhar, virgula=decimal -> 25.080 = 25,080 t
+            if "." in raw and "," not in raw:
+                # 25.080 -> partes separadas por ponto
+                partes = raw.split(".")
+                if all(len(p) == 3 for p in partes[1:]):  # milhar
+                    raw = raw.replace(".", "")
+                    doc.quantidade_sap_ton = float(raw) / 1000
+                else:
+                    doc.quantidade_sap_ton = float(raw.replace(".", ",").replace(",", "."))
+            elif "," in raw:
+                doc.quantidade_sap_ton = float(raw.replace(".", "").replace(",", "."))
+            else:
+                doc.quantidade_sap_ton = float(raw) / 1000
     if doc.quantidade_sap_ton is None: doc.erros.append("Quantidade não encontrada no pedido SAP")
 
 
