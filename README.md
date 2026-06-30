@@ -1,99 +1,86 @@
-﻿# SIA — Sistema Identificador de Arquivos
-
-<div align="center">
+# SIA — Sistema Identificador de Arquivos
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![PyQt6](https://img.shields.io/badge/PyQt6-6.x-41CD52?style=for-the-badge&logo=qt&logoColor=white)
 ![Gemini AI](https://img.shields.io/badge/Gemini_AI-2.0_Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)
 ![Tesseract](https://img.shields.io/badge/Tesseract_OCR-5.5-FF6B35?style=for-the-badge)
-![Release](https://img.shields.io/github/v/release/ramon-nsz/SIA-Sistema-Identificador-de-Arquivos?style=for-the-badge&color=blue)
 ![Platform](https://img.shields.io/badge/Windows_10%2F11-0078D4?style=for-the-badge&logo=windows&logoColor=white)
 
-**Automacao inteligente de documentos fiscais brasileiros com IA e OCR**
+**Automação inteligente de documentos fiscais brasileiros com IA e OCR**
 
 [Download](https://github.com/ramon-nsz/SIA-Sistema-Identificador-de-Arquivos/releases/latest) · [Reportar Bug](https://github.com/ramon-nsz/SIA-Sistema-Identificador-de-Arquivos/issues)
-
-</div>
 
 ---
 
 ## Sobre o Projeto
 
-O **SIA (Sistema Identificador de Arquivos)** automatiza a organizacao de documentos fiscais brasileiros. Desenvolvido para equipes de contas a pagar, elimina o trabalho manual de identificar, casar e combinar NF-e, Boletos e Pedidos SAP em um unico fluxo.
+O **SIA (Sistema Identificador de Arquivos)** automatiza a organização de documentos fiscais brasileiros. Desenvolvido para equipes de contas a pagar, elimina o trabalho manual de identificar, casar e combinar NF-e, Boletos e Pedidos SAP em um único fluxo.
 
-**O problema que resolve:** em operacoes de compras, e comum receber dezenas de PDFs por dia sem organizacao. O processo manual de identificar cada documento, casar a NF com o pedido SAP (por quantidade) e com o boleto (por valor), e gerar um PDF unico consome horas e esta sujeito a erros. O SIA faz tudo em segundos.
+**O problema que resolve:** em operações de compras, é comum receber dezenas de PDFs por dia sem organização. O processo manual de identificar cada documento, casar a NF com o pedido SAP (por quantidade) e com o boleto (por valor), e gerar um PDF único consome horas e está sujeito a erros. O SIA faz tudo em segundos.
+
+> 📸 *[Inserir aqui 2-3 screenshots: tela principal, dashboard com gráficos, exemplo de relatório Excel gerado]*
 
 ---
 
 ## Funcionalidades
 
-| Funcionalidade | Descricao |
+| Funcionalidade | Descrição |
 |---|---|
-| Identificacao com IA | Classifica NF-e, Boletos e Pedidos SAP via Gemini AI |
+| Identificação com IA | Classifica NF-e, Boletos e Pedidos SAP via Gemini AI |
 | OCR Offline | Processa documentos escaneados via Tesseract (sem internet) |
-| Matching Inteligente | Casa NF x SAP por quantidade (0.002t) e NF x Boleto por valor (R$1,00) |
-| Geracao de PDFs | Combina documentos na ordem: SAP + NF-e + Boleto |
-| Dashboard Visual | Graficos, cards de resumo e tabela do lote processado |
-| Relatorio Excel | Exporta .xlsx com 4 abas: Lote, Vencimentos, Resumo e Graficos |
-| Configuracao Guiada | Setup intuitivo para chave Gemini na primeira abertura |
-| Rodizio de Chaves | Alterna entre multiplas chaves Gemini automaticamente |
-| Portavel | Executavel unico, sem instalacao — Tesseract ja incluso |
+| Matching Inteligente | Casa NF x SAP por quantidade (±0,002t) e NF x Boleto por valor (±R$1,00) |
+| Geração de PDFs | Combina documentos na ordem: SAP + NF-e + Boleto |
+| Dashboard Visual | Gráficos, cards de resumo e tabela do lote processado |
+| Relatório Excel | Exporta .xlsx com 4 abas: Lote, Vencimentos, Resumo e Gráficos |
+| Configuração Guiada | Setup intuitivo para chave Gemini na primeira abertura |
+| Rodízio de Chaves | Alterna entre múltiplas chaves Gemini automaticamente |
+| Portátil | Executável único, sem instalação — Tesseract já incluso |
 
 ---
 
 ## Tecnologias
 
 - **Python 3.10+** — linguagem principal
-- **PyQt6** — interface grafica desktop
-- **Google Gemini AI 2.0 Flash** — identificacao e extracao de campos
-- **Tesseract OCR 5.5** — OCR para PDFs escaneados (bundlado)
-- **pdfplumber / pypdf / PyMuPDF** — processamento de PDFs
-- **openpyxl** — geracao de planilhas Excel
-- **PyInstaller** — empacotamento em executavel Windows
+- **PyQt6** — interface gráfica desktop
+- **Google Gemini AI 2.0 Flash** — identificação e extração de campos
+- **Tesseract OCR 5.5** — OCR para PDFs escaneados, usado como fallback quando o Gemini não consegue extrair texto de um documento (ex: scans de baixa qualidade)
+- **pdfplumber / pypdf / PyMuPDF** — cada biblioteca cobre um tipo de PDF com mais confiabilidade (texto nativo, manipulação de páginas e fallback de extração, respectivamente)
+- **openpyxl** — geração de planilhas Excel
+- **PyInstaller** — empacotamento em executável Windows
 
 ---
 
 ## Estrutura de Pastas
+
+```
 SIA-Sistema-Identificador-de-Arquivos/
-
-├── main.py                  # Entry point — interface PyQt6
-
+├── main.py                 # Entry point — interface PyQt6
 ├── src/
-
-│   ├── extractor.py         # Identificacao e extracao de campos
-
-│   ├── matcher.py           # Casamento NF x SAP x Boleto
-
-│   ├── merger.py            # Combinacao de PDFs
-
-│   ├── reporter.py          # Relatorio Excel
-
+│   ├── extractor.py        # Identificação e extração de campos
+│   ├── matcher.py          # Casamento NF x SAP x Boleto
+│   ├── merger.py            # Combinação de PDFs
+│   ├── reporter.py          # Relatório Excel
 │   ├── dashboard.py         # Dashboard visual
+│   ├── config_manager.py    # Configurações do usuário
+│   └── setup_dialog.py      # Tela de configuração inicial
+└── tesseract/                # Binários do Tesseract (bundlados)
+    ├── tesseract.exe
+    └── tessdata/
+        ├── por.traineddata
+        └── eng.traineddata
+```
 
-│   ├── config_manager.py    # Configuracoes do usuario
-
-│   └── setup_dialog.py      # Tela de configuracao inicial
-
-└── tesseract/               # Binarios do Tesseract (bundlados)
-
-├── tesseract.exe
-
-└── tessdata/
-
-├── por.traineddata
-
-└── eng.traineddata
 ---
 
-## Instalacao e Uso
+## Instalação e Uso
 
-### Executavel (recomendado)
+### Executável (recomendado)
 
 1. Acesse [Releases](https://github.com/ramon-nsz/SIA-Sistema-Identificador-de-Arquivos/releases/latest)
 2. Baixe `SIA-v1.0-windows.zip`
 3. Extraia e execute `SIA.exe`
 
-### Codigo-fonte
+### Código-fonte
 
 ```bash
 git clone https://github.com/ramon-nsz/SIA-Sistema-Identificador-de-Arquivos.git
@@ -104,52 +91,67 @@ python main.py
 
 ---
 
-## Configuracao da API Gemini
+## Configuração da API Gemini
 
 1. Acesse [aistudio.google.com](https://aistudio.google.com)
-2. Faca login com sua conta Google
+2. Faça login com sua conta Google
 3. Clique em **Get API key** e depois **Create API key**
-4. Abra o SIA, clique no icone de configuracoes e cole sua chave
+4. Abra o SIA, clique no ícone de configurações e cole sua chave
 
-A API Gemini tem camada gratuita com 1.500 requisicoes/dia — suficiente para uso diario.
+A API Gemini tem camada gratuita com 1.500 requisições/dia — suficiente para uso diário.
+
+---
+
+## Validação
+
+O sistema foi testado com lotes reais de documentos fiscais do meu dia a dia operacional (NF-e, boletos e pedidos SAP de fornecedores diversos), com ajuste iterativo das tolerâncias de matching (quantidade e valor) até refletir corretamente as variações normais do processo fiscal real — como pequenas divergências de ICMS entre o valor do pedido e da nota.
 
 ---
 
 ## Nomenclatura dos arquivos gerados
+
+```
 DDMMAAAA_PEDIDO_4500XXXXXX.pdf
-Exemplo: `22062026_PEDIDO_4500034730.pdf`
+Exemplo: 22062026_PEDIDO_4500034730.pdf
+```
 
 ---
 
 ## Troubleshooting
 
-**Documento retorna "Nao identificado"**
-- Verifique se a chave Gemini esta configurada
-- Aguarde o reset da quota (21h de Brasilia) ou adicione mais chaves
-- O Tesseract OCR e acionado automaticamente como fallback
+**Documento retorna "Não identificado"**
+- Verifique se a chave Gemini está configurada
+- Aguarde o reset da quota (21h de Brasília) ou adicione mais chaves
+- O Tesseract OCR é acionado automaticamente como fallback
 
 **Valor do boleto incorreto**
-- PDFs digitais tem extracao mais precisa que escaneados
+- PDFs digitais têm extração mais precisa que escaneados
 - Boletos sem par podem ser anexados manualmente via script pypdf
 
-**Executavel bloqueado pelo antivirus**
-- Adicione o SIA.exe as excecoes — executaveis PyInstaller sao frequentemente sinalizados como falso-positivo
-- O codigo-fonte completo esta disponivel para auditoria
+**Executável bloqueado pelo antivírus**
+- Adicione o SIA.exe às exceções — executáveis PyInstaller são frequentemente sinalizados como falso-positivo
+- O código-fonte completo está disponível para auditoria
 
 ---
 
 ## Roadmap
 
-- [x] Identificacao automatica de NF-e, Boleto e SAP
+- [x] Identificação automática de NF-e, Boleto e SAP
 - [x] OCR offline via Tesseract
 - [x] Dashboard visual
-- [x] Exportacao Excel
-- [x] Tela de configuracao Gemini
-- [x] Executavel portavel Windows
+- [x] Exportação Excel
+- [x] Tela de configuração Gemini
+- [x] Executável portátil Windows
 - [ ] Suporte a CT-e e NFS-e
-- [ ] Historico de lotes processados
-- [ ] Integracao com Google Drive
-- [ ] Versao macOS/Linux
+- [ ] Histórico de lotes processados
+- [ ] Integração com Google Drive
+- [ ] Versão macOS/Linux
+
+---
+
+## Nota de Desenvolvimento
+
+Este projeto foi concebido, projetado e validado por mim — definição do problema, regras de negócio (lógica de matching, tolerâncias, fluxo de fallback OCR) e arquitetura em camadas — com apoio do Claude Code (Anthropic) para acelerar a implementação. Acredito que usar ferramentas de IA de forma orquestrada é uma competência técnica relevante hoje, desde que acompanhada de entendimento real do que está sendo construído.
 
 ---
 
@@ -157,11 +159,10 @@ Exemplo: `22062026_PEDIDO_4500034730.pdf`
 
 **Ramon Nunes**
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Ramon_Nunes-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ramon-nunes2/)
-[![GitHub](https://img.shields.io/badge/GitHub-ramon--nsz-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ramon-nsz)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Ramon_Nunes-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/ramon-nunes2/) [![GitHub](https://img.shields.io/badge/GitHub-ramon--nsz-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/ramon-nsz)
 
 ---
 
-## Licenca
+## Licença
 
-Distribuido sob a licenca MIT.
+Distribuído sob a licença MIT.
