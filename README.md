@@ -18,7 +18,7 @@ O **SIA (Sistema Identificador de Arquivos)** automatiza a organização de docu
 
 **O problema que resolve:** em operações de compras, é comum receber dezenas de PDFs por dia sem organização. O processo manual de identificar cada documento, casar a NF com o pedido SAP (por quantidade) e com o boleto (por valor), e gerar um PDF único consome horas e está sujeito a erros. O SIA faz tudo em segundos.
 
-> 📸 Disponível em: https://www.linkedin.com/posts/ramon-nunes2_python-automaaexaeto-inteligaeanciaartificial-ugcPost-7476397438426214400-odQT/?utm_source=share&utm_medium=member_desktop&rcm=ACoAAEaF7CYB5JUyb5nHQAFI1S-RKMKV5DveW1Q
+🎥 **[Veja o sistema em funcionamento](https://www.linkedin.com/posts/ramon-nunes2_python-automa%C3%A7%C3%A3o-intelig%C3%AAnciaartificial-ugcPost-7476397438426214400-odQT)** — vídeo demonstrativo no LinkedIn.
 
 ---
 
